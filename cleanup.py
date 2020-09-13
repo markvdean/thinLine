@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import cv2, png
+import cv2
 cap = cv2.VideoCapture('working_files\source_videos\FORWEB2_1 - Copy.mp4')
 total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 count = 0
