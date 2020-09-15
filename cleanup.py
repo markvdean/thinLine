@@ -5,38 +5,57 @@ x = "\\" + str(input("file pls  "))
 cap = cv2.VideoCapture("working_files\\source_videos" + x)
 total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 count = 0
-# w1 = cap.get(3)
-# w2 = w1
-w1 = 0
-w2 = 10
+if input("timelapse mode? yes/no  ") == "no":
+    w1 = cap.get(3)
+    w2 = w1
+    if w1%2 == 0: w1 = w1/2
+    else: w = w1/2 - 0.5
+    if w2%2 == 0: w2 = w2/2 + 1
+    else: w = w2/2 + 0.5
+    k = int(input("slice width? int>0  "))
+else:
+    k = int(input("slice width? int>0  "))
+    w1 = 0
+    w2 = k
+if k >= 2 and int(input("blend slices? yes/no  ")) == "yes":
+    blend = True
+    bpoint = round(float(1/k), 2)
+else: blend = False
 h = cap.get(4)
-# if w1%2 == 0: w1 = w1/2
-# else: w = w1/2 - 0.5
-# if w2%2 == 0: w2 = w2/2 + 1
-# else: w = w2/2 + 0.5
-# w1 = int(w1)
-# w2 = int(w2)
 h = int(h)
+w1 = int(w1)
+w2 = int(w2)
 while cap.isOpened():
     try:
         ret, frame = cap.read()
         if count != 0 and count != 1:
             frameCropped = frame[0:h, w1:w2]
             frameConjoined = cv2.hconcat([frameConjoined, frameCropped])
-            cv2.imshow("preview", frameConjoined)
+            # if count % 2 != 0: cv2.imwrite("working_files/output_image/previousframe-1.png", frameCropped)
+            # else: cv2.imwrite("working_files/output_image/previousframe-2.png", frameCropped)
         elif count == 1:
             outputIMG = cv2.imread("working_files/output_image/output.png")
             frameCropped = frame[0:h, w1:w2]
+            if blend == True:
+                cv2.imwrite("working_files/output_image/previousframe-1.png", frameCropped)
+                w3 = w1
+                w4 = w1 + 1
+                for i in range(k):
+                    frame4Blend = frame[0:h, w3:w4]
+                    # todo: split slice into pixels and blend previous frame over the top in a linear gradient starting with the previous ending with the current, ignoring absolutes.
+                    w3 += 1
+                    w4 += 1
             frameConjoined = cv2.hconcat([outputIMG, frameCropped])
-            cv2.imshow("preview", frameConjoined)
         else:
             frameCropped = frame[0:h, w1:w2]
             cv2.imwrite("working_files/output_image/output.png", frameCropped)
+            if blend == True:
+                cv2.imwrite("working_files/output_image/previousframe-0.png", frameCropped)
         if ret is False:
             print("done!")
             break
-        w1 += 10
-        w2 += 10
+        w1 += k
+        w2 += k
     except: 
         print("uh oh")
         break
