@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import cv2
-cap = cv2.VideoCapture('working_files\source_videos\FORWEB2_1 - Copy.mp4')
+cap = cv2.VideoCapture('working_files\source_videos\Vid.mp4')
 total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 count = 0
 w1 = cap.get(3)
@@ -15,22 +15,27 @@ w1 = int(w1)
 w2 = int(w2)
 h = int(h)
 while cap.isOpened():
-    ret, frame = cap.read()
-    if count != 0 and count != 1:
-        frameCropped = frame[w1:h, 0:w2]
-        frameConjoined = cv2.hconcat([frameConjoined, frameCropped])
-    elif count == 1:
-        outputIMG = cv2.imread("working_files/output_image/output.png")
-        frameCropped = frame[w1:h, 0:w2]
-        frameConjoined = cv2.hconcat([outputIMG, frameCropped])
-    else:
-        frameCropped = frame[w1:h, 0:w2]
-        cv2.imwrite("working_files/output_image/output.png", frameCropped)
-    if ret is False:
-        print("done!")
+    try:
+        ret, frame = cap.read()
+        if count != 0 and count != 1:
+            frameCropped = frame[0:h, w1:w2]
+            frameConjoined = cv2.hconcat([frameConjoined, frameCropped])
+        elif count == 1:
+            outputIMG = cv2.imread("working_files/output_image/output.png")
+            frameCropped = frame[0:h, w1:w2]
+            frameConjoined = cv2.hconcat([outputIMG, frameCropped])
+        else:
+            frameCropped = frame[0:h, w1:w2]
+            cv2.imwrite("working_files/output_image/output.png", frameCropped)
+        if ret is False:
+            print("done!")
+            break
+    except: 
+        print("uh oh")
         break
     count += 1
-    print(count, "of", total)   
-cv2.imwrite("working_files/output_image/output.png", frameConjoined)
+    print(count, "of", total)  
+try: cv2.imwrite("working_files/output_image/output.png", frameConjoined)
+except: print("uh oh")
 print("complete")
 cap.release()
