@@ -1,23 +1,23 @@
-import os
+import os # todo: add more comments
 import numpy as np
 import cv2
 x = "\\" + str(input("file pls  "))
 cap = cv2.VideoCapture("working_files\\source_videos" + x)
 total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 count = 0
-if input("timelapse mode? yes/no  ") == "no":
+if input("timelapse mode? yes/no  ") == "no": # adjusts ending and beginning of cropped frame region
+    k = int(input("slice width? int>0  "))
     w1 = cap.get(3)
     w2 = w1
     if w1%2 == 0: w1 = w1/2
-    else: w = w1/2 - 0.5
-    if w2%2 == 0: w2 = w2/2 + 1
-    else: w = w2/2 + 0.5
-    k = int(input("slice width? int>0  "))
+    else: w = w1/2 - k/2
+    if w2%2 == 0: w2 = w2/2 + k
+    else: w = w2/2 + k/2
 else:
     k = int(input("slice width? int>0  "))
     w1 = 0
     w2 = k
-if k >= 2 and int(input("blend slices? yes/no  ")) == "yes":
+if k >= 3 and int(input("blend slices? (best used in timelapse mode) yes/no  ")) == "yes": # add option for ignoring absolutes and therefore reducing minimum to 2 with adjusted version of the blending part?
     blend = True
     bpoint = round(float(1/k), 2)
 else: blend = False
@@ -42,7 +42,7 @@ while cap.isOpened():
                 w4 = w1 + 1
                 for i in range(k):
                     frame4Blend = frame[0:h, w3:w4]
-                    # todo: split slice into pixels and blend previous frame over the top in a linear gradient starting with the previous ending with the current, ignoring absolutes.
+                    # todo: split slice into pixels and blend previous frame over the top in a linear gradient starting with the previous ending with the current, ignoring absolutes for blending, adding original on the end, though.
                     w3 += 1
                     w4 += 1
             frameConjoined = cv2.hconcat([outputIMG, frameCropped])
