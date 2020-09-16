@@ -26,49 +26,6 @@ h = int(h)
 w1 = int(w1)
 w2 = int(w2)
 while cap.isOpened():
-<<<<<<< HEAD
-    # try:
-    ret, frame = cap.read()
-    if count != 0 and count != 1:
-        frameCropped = frame[0:h, w1:w2]
-        frameConjoined = cv2.hconcat([frameConjoined, frameCropped])
-        # if count % 2 != 0: cv2.imwrite("working_files/output_image/previousframe-1.png", frameCropped)
-        # else: cv2.imwrite("working_files/output_image/previousframe-2.png", frameCropped)
-    elif count == 1:
-        outputIMG = cv2.imread("working_files/output_image/output.png")
-        frameCropped = frame[0:h, w1:w2]
-        if blend == True:
-            w3 = w1 + k
-            w4 = w2 + k
-            frame4nextCropped = frame[0:h, w3:w4]
-            cv2.imwrite("working_files/output_image/previousframe-2.png", frame4nextCropped)
-            w3 = w1
-            w4 = w1 + 1
-            for i in range(k):
-                frame4Blend1 = frame[0:h, w3:w4]
-                frame4Blend2 = cv2.imread("working_files/outputimage/previousframe-1.png")
-                cv2.imshow("test", frame4Blend2)
-                frame4Blend21 = frame4Blend2[0:h, w3:w4]
-                b1 = 1 - bpoint
-                b2 = bpoint
-                frameInBlending = cv2.addWeighted(frame4Blend1, b1, frame4Blend21, b2, 0)
-                w3 += 1
-                w4 += 1
-                b1 -= bpoint
-                b2 += bpoint
-                if i == 0: frameCropped = frameInBlending
-                else: cv2.hconcat([frame4nextCropped, frameInBlending])
-        frameConjoined = cv2.hconcat([outputIMG, frameCropped])
-    else:
-        frameCropped = frame[0:h, w1:w2]
-        cv2.imwrite("working_files/output_image/output.png", frameCropped)
-        if blend == True:
-            w3 = w1 + k
-            w4 = w2 + k
-            cv2.imwrite("working_files/output_image/previousframe-1.png", frame)
-    if ret is False:
-        print("done!")
-=======
     try:
         ret, frame = cap.read()
         if count != 0 and count != 1:
