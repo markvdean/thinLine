@@ -133,3 +133,6 @@ dmypy.json
 *.mpeg
 test.py
 /.vscode
+moduleA.py
+moduleB.py
+shell.py
